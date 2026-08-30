@@ -1,0 +1,44 @@
+[
+  {
+    "Course Name": "Financial Modelling & Valuation",
+    "Domain": "Finance",
+    "Price": "₹2,499",
+    "Rating": "4.6",
+    "Course Link": "https://example.com/course/financial-modelling"
+  },
+  {
+    "Course Name": "Digital Marketing Fundamentals",
+    "Domain": "Marketing",
+    "Price": "Free",
+    "Rating": "4.4",
+    "Course Link": "https://example.com/course/digital-marketing"
+  },
+  {
+    "Course Name": "People Analytics for HR",
+    "Domain": "HR",
+    "Price": "₹1,199",
+    "Rating": "4.5",
+    "Course Link": "https://example.com/course/people-analytics"
+  },
+  {
+    "Course Name": "Case Interview Prep Bootcamp",
+    "Domain": "General",
+    "Price": "₹3,999",
+    "Rating": "4.8",
+    "Course Link": "https://example.com/course/case-interview"
+  },
+  {
+    "Course Name": "Advanced Excel for Consulting",
+    "Domain": "General",
+    "Price": "₹999",
+    "Rating": "4.3",
+    "Course Link": "https://example.com/course/advanced-excel"
+  },
+  {
+    "Course Name": "Equity Research Masterclass",
+    "Domain": "Finance",
+    "Price": "₹4,499",
+    "Rating": "4.7",
+    "Course Link": "https://example.com/course/equity-research"
+  }
+]
