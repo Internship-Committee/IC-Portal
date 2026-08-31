@@ -50,21 +50,17 @@ step, no server required to run it.
     live-projects.json
 
   /assets
-    logo.png                     ⚠️ PLACEHOLDER — see note below
+    logo.png                     IC IIM Rohtak logo (1600×1600)
 ```
 
 ### About the logo file
 
-The IC logo you shared in this conversation could not be saved into the
-project's files directly — only image previews reached me, not the
-underlying file. `assets/logo.png` is currently a plain placeholder circle
-marked "PLACEHOLDER LOGO" so the site still looks and works correctly.
-
-**To finish the job:** replace `assets/logo.png` with your real logo file
-(same filename, ideally a transparent PNG or SVG). Nothing else needs to
-change — the sidebar, browser tab icon, and the homepage's 3D revolving
-logo all read from that one file automatically. If you'd rather it were an
-`.svg`, update the single `logo:` line in `js/config.js` to point at it.
+`assets/logo.png` currently holds the IC IIM Rohtak crest logo. To swap in
+a higher-resolution version, replace that file (same filename, ideally a
+transparent-background PNG or SVG). Nothing else needs to change — the
+sidebar, browser tab icon, and the homepage's 3D revolving logo all read
+from that one file automatically. If you'd rather it were an `.svg`,
+update the single `logo:` line in `js/config.js` to point at it.
 
 The homepage renders the logo in white via CSS (`filter: brightness(0)
 invert(1)`), so a logo with any original colour will still show up crisp
@@ -94,10 +90,11 @@ case-insensitive) in each Google Sheet tab:
 ```
 Course Name | Domain | Price | Rating | Course Link
 ```
-`Domain` can be any text (Finance, Marketing, HR, General, or a new one you
-add later) — the filter pills on the Course Repository page are generated
-from whatever values appear in the sheet, so a new domain needs no code
-change.
+`Domain` should be one of: Finance, Marketing, Consulting, Entrepreneurship,
+Leadership, Data Analytics, Business Analytics, Operations Management (or a
+new one you add later) — the filter pills on the Course Repository page are
+generated from whatever values appear in the sheet, so a new domain needs no
+code change. The "All" pill is always added automatically.
 
 **Case Studies**
 ```
@@ -144,57 +141,42 @@ Apply URL | Deadline | Policy Note | Google Doc URL
 
 ---
 
-## 3. Connecting Google Sheets (step-by-step)
+## 3. Connecting the Google Sheet (step-by-step)
 
-**What a browser can and can't do.** Client-side JavaScript cannot read a
-private Google Sheet directly — Google does not expose a CORS-friendly,
-authenticated JSON endpoint for arbitrary browser code. The reliable,
-correct way to bridge a Sheet to a static website is a small **Google Apps
-Script Web App**, which Google hosts for you at no cost and which returns
-plain JSON that any page can `fetch()`.
+The site is already wired to one Google Sheet — the ID is set in
+`js/config.js` (`IC_CONFIG.sheetId`). It reads each tab of that sheet as
+CSV directly in the browser, using a Google-provided export endpoint. No
+Apps Script, no deployment, no separate "Publish to web" link to generate
+per tab.
 
-1. **Open the Google Sheet** that holds one of the data types above (you
-   can use one Sheet with multiple tabs, or six separate Sheets).
-2. In the Sheet, go to **Extensions → Apps Script**.
-3. Replace the default code with:
-
+1. **Share the sheet.** Open the sheet → **Share** (top right) → under
+   "General access" choose **Anyone with the link**, role **Viewer**.
+   This is required — without it, the site can't read the tabs at all.
+2. **Rename the six tabs** at the bottom of the sheet to exactly:
+   `Courses`, `Case Studies`, `GitHub Repositories`, `IIMR Resources`,
+   `Case Competitions`, `Live Projects` (matching `IC_CONFIG.sheetTabs` in
+   `js/config.js` — spelling and spacing must match exactly).
+3. **Set up the column headers** in each tab per "Spreadsheet schemas"
+   above.
+4. In `js/config.js`, flip that tab's flag to `false`, e.g.:
    ```javascript
-   function doGet(e) {
-     const sheetName = e.parameter.sheet || "Sheet1";
-     const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
-     const rows = sheet.getDataRange().getValues();
-     const headers = rows.shift();
-     const data = rows.map(row => {
-       const obj = {};
-       headers.forEach((h, i) => obj[h] = row[i]);
-       return obj;
-     });
-     return ContentService
-       .createTextOutput(JSON.stringify(data))
-       .setMimeType(ContentService.MimeType.JSON);
+   useLocalData: {
+     courses: false,   // now reads live from the "Courses" tab
+     caseStudies: true, // still on demo data until its tab is ready
+     ...
    }
    ```
-
-4. Click **Deploy → New deployment → Web app**.
-   - Execute as: **Me**
-   - Who has access: **Anyone with the link**
-     (this exposes only the data you intentionally put in that sheet tab —
-     don't put sensitive/private information in a sheet you connect this way)
-5. Copy the deployment URL (ends in `/exec`).
-6. In `js/config.js`, paste it into the matching line under `endpoints`,
-   e.g.:
-   ```javascript
-   endpoints: {
-     courses: "https://script.google.com/macros/s/AKfycb.../exec?sheet=Courses",
-   }
-   ```
-7. Set `useLocalData.courses` to `false` in the same file.
-8. Repeat for each data type you want live. You can mix and match — e.g.
-   keep Competitions on demo data while Live Projects is already connected.
+5. Repeat per tab — mix and match freely, e.g. keep Competitions on demo
+   data while Courses is already live.
 
 From then on, **the committee only ever edits the Google Sheet.** No code
-changes, no redeploy needed — the website reads the sheet fresh on every
+changes, no redeploy needed — the website reads each tab fresh on every
 page load.
+
+**If you'd rather use a different sheet, or a real backend later:** paste
+a full URL (returning JSON) into the matching line under `endpoints` in
+`js/config.js` — that always takes priority over the shared sheet for that
+one data source, no other file needs to change.
 
 ---
 

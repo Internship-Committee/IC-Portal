@@ -14,25 +14,46 @@
     "Course Link": "https://example.com/course/digital-marketing"
   },
   {
-    "Course Name": "People Analytics for HR",
-    "Domain": "HR",
+    "Course Name": "People Analytics for Leaders",
+    "Domain": "Leadership",
     "Price": "₹1,199",
     "Rating": "4.5",
     "Course Link": "https://example.com/course/people-analytics"
   },
   {
     "Course Name": "Case Interview Prep Bootcamp",
-    "Domain": "General",
+    "Domain": "Consulting",
     "Price": "₹3,999",
     "Rating": "4.8",
     "Course Link": "https://example.com/course/case-interview"
   },
   {
-    "Course Name": "Advanced Excel for Consulting",
-    "Domain": "General",
+    "Course Name": "Lean Six Sigma Fundamentals",
+    "Domain": "Operations Management",
     "Price": "₹999",
     "Rating": "4.3",
-    "Course Link": "https://example.com/course/advanced-excel"
+    "Course Link": "https://example.com/course/lean-six-sigma"
+  },
+  {
+    "Course Name": "Startup Growth Playbook",
+    "Domain": "Entrepreneurship",
+    "Price": "₹1,499",
+    "Rating": "4.6",
+    "Course Link": "https://example.com/course/startup-growth"
+  },
+  {
+    "Course Name": "SQL & Data Visualization for Analysts",
+    "Domain": "Data Analytics",
+    "Price": "₹1,799",
+    "Rating": "4.7",
+    "Course Link": "https://example.com/course/sql-data-viz"
+  },
+  {
+    "Course Name": "Business Analytics with Excel & Power BI",
+    "Domain": "Business Analytics",
+    "Price": "₹2,199",
+    "Rating": "4.5",
+    "Course Link": "https://example.com/course/business-analytics"
   },
   {
     "Course Name": "Equity Research Masterclass",

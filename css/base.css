@@ -2,7 +2,7 @@
    IC Portal — Base styles, tokens, typography
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 :root{
   /* --- Color tokens --- */
@@ -32,7 +32,7 @@
   --radius-m:  16px;
   --radius-l:  22px;
 
-  --font-display: 'Playfair Display', 'Georgia', serif;
+  --font-display: 'Fraunces', 'Georgia', serif;
   --font-body:    'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   --sidebar-w: 272px;

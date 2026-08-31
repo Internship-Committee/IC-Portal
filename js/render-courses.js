@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  const domains = ["All", ...Array.from(new Set(courses.map(c => c.domain || "General")))];
+  const domains = ["All", ...Array.from(new Set(courses.map(c => c.domain || "Uncategorized")))];
   let activeDomain = "All";
 
   function renderFilters(){
@@ -39,14 +39,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function renderGrid(){
-    const list = activeDomain === "All" ? courses : courses.filter(c => (c.domain || "General") === activeDomain);
+    const list = activeDomain === "All" ? courses : courses.filter(c => (c.domain || "Uncategorized") === activeDomain);
     if (!list.length){
       grid.innerHTML = `<div class="state-msg">No courses in this domain yet.</div>`;
       return;
     }
     grid.innerHTML = list.map(c => `
       <article class="glass-card course-card">
-        <span class="domain-tag">${escapeHtml(c.domain || "General")}</span>
+        <span class="domain-tag">${escapeHtml(c.domain || "Uncategorized")}</span>
         <h3>${escapeHtml(c.name)}</h3>
         <div class="course-row">
           ${c.price ? `<span class="price-chip">${escapeHtml(c.price)}</span>` : `<span></span>`}

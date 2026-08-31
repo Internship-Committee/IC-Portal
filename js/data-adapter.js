@@ -12,20 +12,86 @@ const ICData = (() => {
 
   async function fetchSource(key){
     const useLocal = IC_CONFIG.useLocalData[key];
-    const url = useLocal ? IC_CONFIG.localPaths[key] : IC_CONFIG.endpoints[key];
 
-    if (!url){
+    // 1. Local demo JSON (default until the sheet is wired up).
+    if (useLocal){
+      const url = IC_CONFIG.localPaths[key];
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error(`Could not load "${key}" data (HTTP ${res.status}).`);
+      return res.json();
+    }
+
+    // 2. Explicit override endpoint (e.g. Apps Script URL returning JSON),
+    //    if one was pasted into IC_CONFIG.endpoints.
+    const overrideUrl = IC_CONFIG.endpoints && IC_CONFIG.endpoints[key];
+    if (overrideUrl){
+      const res = await fetch(overrideUrl, { cache: "no-store" });
+      if (!res.ok) throw new Error(`Could not load "${key}" data (HTTP ${res.status}).`);
+      return res.json();
+    }
+
+    // 3. Default: read the matching tab of the shared Google Sheet as CSV.
+    const sheetId = IC_CONFIG.sheetId;
+    const tabName = IC_CONFIG.sheetTabs && IC_CONFIG.sheetTabs[key];
+    if (!sheetId || !tabName){
       throw new Error(
-        `No data source configured for "${key}". Set IC_CONFIG.endpoints.${key} ` +
-        `in js/config.js, or keep useLocalData.${key} = true to use the bundled demo data.`
+        `No data source configured for "${key}". Set IC_CONFIG.sheetId and ` +
+        `IC_CONFIG.sheetTabs.${key} in js/config.js, or keep useLocalData.${key} = true ` +
+        `to use the bundled demo data.`
       );
     }
 
-    const res = await fetch(url, { cache: "no-store" });
+    const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
+    const res = await fetch(csvUrl, { cache: "no-store" });
     if (!res.ok){
-      throw new Error(`Could not load "${key}" data (HTTP ${res.status}).`);
+      throw new Error(
+        `Could not load "${key}" data from the "${tabName}" tab (HTTP ${res.status}). ` +
+        `Make sure the sheet is shared as "Anyone with the link – Viewer" and the tab ` +
+        `name matches exactly.`
+      );
     }
-    return res.json();
+    const csvText = await res.text();
+    return parseCsvToObjects(csvText);
+  }
+
+  // ---- CSV parsing (handles quoted fields, embedded commas/newlines,
+  // and "" escaped quotes — the format Google Sheets exports).
+
+  function parseCsvToObjects(csvText){
+    const rows = parseCsv(csvText);
+    if (!rows.length) return [];
+    const headers = rows[0];
+    return rows.slice(1)
+      .filter(r => r.some(cell => cell !== ""))
+      .map(r => {
+        const obj = {};
+        headers.forEach((h, i) => { obj[h] = r[i] !== undefined ? r[i] : ""; });
+        return obj;
+      });
+  }
+
+  function parseCsv(text){
+    const rows = [];
+    let row = [], field = "", inQuotes = false;
+    for (let i = 0; i < text.length; i++){
+      const c = text[i];
+      if (inQuotes){
+        if (c === '"'){
+          if (text[i + 1] === '"'){ field += '"'; i++; }
+          else { inQuotes = false; }
+        } else {
+          field += c;
+        }
+      } else {
+        if (c === '"'){ inQuotes = true; }
+        else if (c === ','){ row.push(field); field = ""; }
+        else if (c === '\n'){ row.push(field); rows.push(row); row = []; field = ""; }
+        else if (c === '\r'){ /* skip, \n handles the break */ }
+        else { field += c; }
+      }
+    }
+    if (field !== "" || row.length){ row.push(field); rows.push(row); }
+    return rows;
   }
 
   // ---- Normalizers: map raw rows (from a Sheet or local JSON) into a
@@ -45,7 +111,7 @@ const ICData = (() => {
   function normCourse(row){
     return {
       name:   pick(row, "Course Name", "name"),
-      domain: pick(row, "Domain", "domain") || "General",
+      domain: pick(row, "Domain", "domain") || "Uncategorized",
       price:  pick(row, "Price", "price"),
       rating: parseFloat(pick(row, "Rating", "rating")) || null,
       link:   pick(row, "Course Link", "link", "url")
