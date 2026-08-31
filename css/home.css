@@ -111,20 +111,14 @@
 /* On desktop/laptop, keep everything above the fold — no scrolling needed
    to see the hero + all three cards. Mobile keeps its natural, roomier flow. */
 body[data-page="home"] .main{
-  padding-top: 22px;
-  padding-bottom: 26px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  min-height: calc(100vh - 2px);
+  padding-top: 18px;
+  padding-bottom: 20px;
 }
 body[data-page="home"] .site-footer{
-  margin-top: 28px;
+  margin-top: 26px;
 }
 @media (max-width: 900px){
   body[data-page="home"] .main{
-    min-height: unset;
-    display:block;
     padding-top: 34px;
     padding-bottom: 70px;
   }
