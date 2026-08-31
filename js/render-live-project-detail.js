@@ -54,11 +54,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         ${project.jobDescription ? section("Job Description", `<p>${escapeHtml(project.jobDescription)}</p>`) : ""}
         ${project.roles.length ? section("Role" + (project.roles.length > 1 ? "s" : ""), project.roles.map(roleBlock).join("")) : ""}
         ${project.selectionCriteria.length ? section("Selection Criteria", bulletList(project.selectionCriteria)) : ""}
-        ${project.policyNote ? `
-          <div class="policy-note">
-            ${ICIcons.alert}
-            <div><strong>IC Policy Note:</strong> ${escapeHtml(project.policyNote)}</div>
-          </div>` : ""}
       </div>
 
       <aside class="lp-sidebar">

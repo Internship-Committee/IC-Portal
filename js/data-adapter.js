@@ -168,7 +168,6 @@ const ICData = (() => {
       duration: pick(row, "Project Duration", "duration"),
       applyUrl: pick(row, "Apply URL", "apply link", "application link"),
       deadline: pick(row, "Deadline", "application deadline"),
-      policyNote: pick(row, "Policy Note", "important note", "important ic policy note"),
       googleDocUrl: pick(row, "Google Doc URL", "google doc")
     };
   }

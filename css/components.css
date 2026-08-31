@@ -52,6 +52,11 @@
   min-height: 210px;
   display:flex; flex-direction:column; justify-content:space-between;
 }
+.home-card .card-top{
+  height: 46px;
+  display:flex; align-items:center;
+  margin-bottom: 26px;
+}
 .home-card .card-icon{
   width: 46px; height:46px;
   border-radius: 12px;
@@ -59,7 +64,6 @@
   border: 1px solid rgba(92,134,255,0.28);
   display:flex; align-items:center; justify-content:center;
   color: var(--accent-2);
-  margin-bottom: 26px;
 }
 .home-card .card-icon svg{ width:22px; height:22px; }
 .home-card h3{ font-size: 1.35rem; margin-bottom: 8px; }
@@ -72,15 +76,6 @@
 .home-card .card-cta svg{ width:14px; height:14px; transition: transform .22s var(--ease); }
 .home-card:hover .card-cta svg{ transform: translateX(4px); }
 
-/* Variant: tag-led card (breaks the icon-square+arrow pattern) */
-.home-card--tagged h3{ margin-bottom: 12px; }
-.home-card--tagged .card-tags{ display:flex; gap:8px; margin-bottom: 14px; }
-.home-card--tagged .card-tag{
-  font-size: 11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
-  color: var(--text-secondary);
-  padding: 5px 11px; border-radius: 999px;
-  border: 1px solid var(--surface-border);
-}
 .home-card--tagged .muted-link{ font-size: 13.8px; font-weight:700; }
 
 /* Variant: live-status card */
@@ -88,7 +83,6 @@
   display:inline-flex; align-items:center; gap:7px;
   font-size: 11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
   color: var(--live-red);
-  margin-bottom: 22px;
 }
 .home-card--live .card-live-badge .pulse-dot{
   width:7px; height:7px; border-radius:50%; background: var(--live-red);

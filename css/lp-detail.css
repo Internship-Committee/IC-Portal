@@ -101,14 +101,3 @@
 .info-row svg{ width:16px; height:16px; color: var(--accent-2); flex-shrink:0; margin-top:2px; }
 .info-row .info-label{ font-size: 11px; text-transform:uppercase; letter-spacing:.06em; color: var(--text-muted); font-weight:700; }
 .info-row .info-value{ font-size: 13.8px; color: var(--text-primary); font-weight:600; }
-
-.policy-note{
-  padding: 18px 20px;
-  border-radius: var(--radius-m);
-  border: 1px solid rgba(255,200,80,0.28);
-  background: rgba(255,200,80,0.06);
-  font-size: 13.3px;
-  color: #F4DFA6;
-  display:flex; gap:12px;
-}
-.policy-note svg{ width:18px; height:18px; flex-shrink:0; margin-top:1px; }

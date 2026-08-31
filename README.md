@@ -125,7 +125,7 @@ ID | Company | Status | Tagline | About the Company | Job Description |
 Role 1 | Role 1 Responsibilities | Role 1 Takeaways |
 Role 2 | Role 2 Responsibilities | Role 2 Takeaways |
 Selection Criteria | Location | Project Duration |
-Apply URL | Deadline | Policy Note | Google Doc URL
+Apply URL | Deadline | Google Doc URL
 ```
 - `ID` should be a short unique slug per row (e.g. `acme-2026-outreach`) —
   it's what the detail page URL uses (`live-project.html?id=acme-2026-outreach`).
@@ -195,11 +195,11 @@ information.
 2. When it's ready to publish, someone on the committee copies the
    relevant fields into one row of the Live Projects sheet (Company, About,
    Job Description, Role(s), Selection Criteria, Location, Duration, Apply
-   URL, Deadline, Policy Note) — the `Google Doc URL` column just keeps a
+   URL, Deadline) — the `Google Doc URL` column just keeps a
    reference back to the source document for the committee's own records.
    This takes a couple of minutes per project and is far more reliable
    than trying to auto-parse a Doc's formatting in the browser.
-3. The website renders that row into a polished, native page automatically
+3. The website renders that row into a native page automatically
    — no HTML is written by hand.
 
 **If you later want to remove that manual copy step:** the architecture
