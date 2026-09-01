@@ -60,7 +60,7 @@ const IC_CONFIG = {
     githubRepos: true,
     resources: true,
     competitions: true,
-    liveProjects: false
+    liveProjects: true
   },
 
   // Local fallback / demo data (bundled with the site, edited by hand
