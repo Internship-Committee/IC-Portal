@@ -71,7 +71,7 @@ white against the dark background — no need to pre-process it.
 ## 2. Data architecture — how content flows
 
 ```
-Google Sheet  →  Apps Script Web App (JSON)  →  js/config.js (one URL)
+Google Sheet (CSV export)  →  js/config.js (sheet ID + tab names)
       →  js/data-adapter.js (fetch + normalize)  →  render-*.js  →  cards
 ```
 

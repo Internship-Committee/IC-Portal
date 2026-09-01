@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.title = `${project.company} — Live Project · IC IIM Rohtak`;
 
   const deadlineText = project.deadline ? formatDate(project.deadline) : "Rolling";
+  const applyButton = applyBtn(project.applyUrl);
 
   root.innerHTML = `
     <div class="lp-header">
@@ -41,9 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         ${project.tagline ? `<p class="lp-tagline">${escapeHtml(project.tagline)}</p>` : ""}
       </div>
       <div class="lp-header-cta">
-        <a class="btn btn-primary" href="${escapeHtml(project.applyUrl)}" target="_blank" rel="noopener">
-          Apply Now ${ICIcons.arrowRight}
-        </a>
+        ${applyButton}
         <span class="deadline-note">${ICIcons.calendar} Apply by ${escapeHtml(deadlineText)}</span>
       </div>
     </div>
@@ -59,9 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <div class="glass-card apply-card">
           <span class="deadline-label">Application Deadline</span>
           <div class="deadline-big">${escapeHtml(deadlineText)}</div>
-          <a class="btn btn-primary" href="${escapeHtml(project.applyUrl)}" target="_blank" rel="noopener">
-            Apply Now ${ICIcons.arrowRight}
-          </a>
+          ${applyButton}
         </div>
         <div class="glass-card">
           <div class="info-row">${ICIcons.pin}<div><div class="info-label">Location</div><div class="info-value">${escapeHtml(project.location)}</div></div></div>
@@ -75,6 +72,29 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function section(title, inner){
   return `<section class="glass-card lp-section"><h2>${escapeHtml(title)}</h2>${inner}</section>`;
+}
+
+// Builds the Apply Now button as a real hyperlink. If the sheet's Apply URL
+// cell is empty, or isn't a usable link (e.g. someone pasted a display
+// label from a Google Sheets "smart chip" instead of the actual URL), this
+// renders a disabled-looking button instead of a broken/dead link.
+function applyBtn(rawUrl){
+  const url = normalizeUrl(rawUrl);
+  if (!url){
+    return `<span class="btn btn-primary is-disabled" title="Apply link not set yet — add one to the Apply URL column">Apply Now ${ICIcons.arrowRight}</span>`;
+  }
+  return `<a class="btn btn-primary" href="${escapeHtml(url)}" target="_blank" rel="noopener">Apply Now ${ICIcons.arrowRight}</a>`;
+}
+
+// Accepts only genuine http(s) URLs. Anything else (blank cells, or plain
+// text that isn't a link) is treated as "no link" rather than rendered as
+// a broken href.
+function normalizeUrl(value){
+  const v = (value || "").toString().trim();
+  if (!v) return "";
+  if (/^https?:\/\//i.test(v)) return v;
+  if (/^www\./i.test(v)) return `https://${v}`;
+  return "";
 }
 
 function roleBlock(role){
