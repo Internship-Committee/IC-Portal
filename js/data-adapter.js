@@ -153,10 +153,41 @@ const ICData = (() => {
     };
   }
 
+  // Live Project stages. Put just the NUMBER in the sheet's "Status" column
+  // — no need to type these labels out row after row:
+  //   0 = Closed        (hidden from the site entirely, doesn't show on the status bar)
+  //   1 = Applications Open
+  //   2 = Selection Process Ongoing
+  //   3 = Ongoing Project
+  // Leaving "Status" blank defaults to 1 (Applications Open). The words
+  // "Live"/"Closed" (used by older rows) still work too, for backward
+  // compatibility.
+  const LP_STAGES = {
+    0: "Closed",
+    1: "Applications Open",
+    2: "Selection Process Ongoing",
+    3: "Ongoing Project"
+  };
+
+  function parseStage(raw){
+    const v = (raw == null ? "" : raw).toString().trim().toLowerCase();
+    if (v === "") return 1;
+    if (v === "0" || v === "closed") return 0;
+    if (v === "1" || v === "live" || v === "open" || v === "applications open" || v === "application open") return 1;
+    if (v === "2" || v === "selection process ongoing" || v === "selection ongoing" || v === "selection") return 2;
+    if (v === "3" || v === "ongoing project" || v === "project ongoing" || v === "ongoing") return 3;
+    const n = parseInt(v, 10);
+    if (!isNaN(n) && n >= 0 && n <= 3) return n;
+    return 1; // unrecognized text defaults to "Applications Open" rather than hiding the row
+  }
+
   function normLiveProject(row){
+    const stage = parseStage(pick(row, "Status", "status"));
     return {
       id: pick(row, "ID", "id") || slugify(pick(row, "Company", "company") + "-" + pick(row, "Project/Role", "role")),
       company: pick(row, "Company", "company"),
+      stage: stage,
+      stageLabel: LP_STAGES[stage],
       status: (pick(row, "Status", "status") || "Live"),
       tagline: pick(row, "Tagline", "opening", "about the company summary"),
       aboutCompany: pick(row, "About the Company", "about"),
@@ -251,7 +282,7 @@ const ICData = (() => {
   async function getLiveProjects(){
     const rows = await fetchSource("liveProjects");
     return rows.map(normLiveProject)
-      .filter(p => (p.status || "").toLowerCase() !== "closed")
+      .filter(p => p.stage !== 0)
       .sort((a, b) => parseDeadline(a.deadline) - parseDeadline(b.deadline));
   }
 

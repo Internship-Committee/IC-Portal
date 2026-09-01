@@ -33,11 +33,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const deadlineText = project.deadline ? formatDate(project.deadline) : "Rolling";
   const applyButton = applyBtn(project.applyUrl);
+  const stage = project.stage; // 1, 2, or 3 (0/"Closed" rows never reach this page)
 
   root.innerHTML = `
     <div class="lp-header">
       <div>
-        <span class="live-flag"><span class="pulse-dot"></span> LIVE PROJECT</span>
+        <span class="live-flag stage-${stage}"><span class="pulse-dot"></span> ${escapeHtml(project.stageLabel.toUpperCase())}</span>
         <h1>${escapeHtml(project.company)}</h1>
         ${project.tagline ? `<p class="lp-tagline">${escapeHtml(project.tagline)}</p>` : ""}
       </div>
@@ -46,6 +47,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         <span class="deadline-note">${ICIcons.calendar} Apply by ${escapeHtml(deadlineText)}</span>
       </div>
     </div>
+
+    ${stageBar(stage)}
 
     <div class="lp-body">
       <div class="lp-main">
@@ -69,6 +72,40 @@ document.addEventListener("DOMContentLoaded", async () => {
     </div>
   `;
 });
+
+// Renders the 3-stage "road" progress bar: a route with a pin at each
+// stage, the traveled portion of the road highlighted up to the current
+// stage. Stage 0 ("Closed") never reaches this page — closed rows are
+// filtered out before the detail page can load them.
+function stageBar(stage){
+  const steps = [
+    { n: 1, label: "Applications Open", icon: ICIcons.mail },
+    { n: 2, label: "Selection Process Ongoing", icon: ICIcons.users },
+    { n: 3, label: "Ongoing Project", icon: ICIcons.rocket }
+  ];
+  // Road fills from the start up to the current stage's pin (0%, 50%, 100%).
+  const fillPct = ((stage - 1) / (steps.length - 1)) * 100;
+
+  const pins = steps.map(s => {
+    const state = s.n < stage ? "done" : s.n === stage ? "current" : "upcoming";
+    return `
+      <div class="stage-pin stage-pin--${state}">
+        <span class="stage-pin-icon">${s.icon}</span>
+        <span class="stage-pin-label">${escapeHtml(s.label)}</span>
+      </div>
+    `;
+  }).join("");
+
+  return `
+    <div class="glass-card lp-stage-bar" aria-label="Project stage: ${escapeHtml(steps[stage-1].label)}">
+      <div class="stage-road">
+        <div class="stage-road-track"></div>
+        <div class="stage-road-fill stage-${stage}" style="width:${fillPct}%"></div>
+        <div class="stage-pins">${pins}</div>
+      </div>
+    </div>
+  `;
+}
 
 function section(title, inner){
   return `<section class="glass-card lp-section"><h2>${escapeHtml(title)}</h2>${inner}</section>`;
