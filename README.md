@@ -121,15 +121,22 @@ the page sorts and formats it automatically.
 
 **Live Projects**
 ```
-ID | Company | Status | Tagline | About the Company | Job Description |
+ID | Company | Status | Tagline | About the Company |
 Role 1 | Role 1 Responsibilities | Role 1 Takeaways |
 Role 2 | Role 2 Responsibilities | Role 2 Takeaways |
+Role 3 | Role 3 Responsibilities | Role 3 Takeaways |
+... (as many "Role N" triples as you need) ...
 Selection Criteria | Location | Project Duration |
 Apply URL | Deadline | Google Doc URL
 ```
 - `ID` should be a short unique slug per row (e.g. `acme-2026-outreach`) —
   it's what the detail page URL uses (`live-project.html?id=acme-2026-outreach`).
   If you leave it blank, one is generated automatically from the company name.
+- Roles are unlimited: add `Role 4`, `Role 5`, etc. (each with its own
+  `Responsibilities` and `Takeaways` columns) if a project has more than
+  three roles — no code change needed. Roles are read in order starting
+  from `Role 1`; leave no gaps (don't skip from `Role 1` straight to
+  `Role 3`).
 - `Role 1 Responsibilities` / `Selection Criteria`: put one point per line
   inside the cell (press <kbd>Alt/⌥</kbd>+<kbd>Enter</kbd> in Sheets for a
   line break within a cell) — the page turns each line into a bullet.
@@ -194,7 +201,7 @@ information.
    in a Google Doc.
 2. When it's ready to publish, someone on the committee copies the
    relevant fields into one row of the Live Projects sheet (Company, About,
-   Job Description, Role(s), Selection Criteria, Location, Duration, Apply
+   Role(s), Selection Criteria, Location, Duration, Apply
    URL, Deadline) — the `Google Doc URL` column just keeps a
    reference back to the source document for the committee's own records.
    This takes a couple of minutes per project and is far more reliable

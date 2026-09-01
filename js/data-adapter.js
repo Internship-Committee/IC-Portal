@@ -154,14 +154,12 @@ const ICData = (() => {
   }
 
   function normLiveProject(row){
-    const rolesRaw = pick(row, "Roles", "role", "project/role");
     return {
       id: pick(row, "ID", "id") || slugify(pick(row, "Company", "company") + "-" + pick(row, "Project/Role", "role")),
       company: pick(row, "Company", "company"),
       status: (pick(row, "Status", "status") || "Live"),
       tagline: pick(row, "Tagline", "opening", "about the company summary"),
       aboutCompany: pick(row, "About the Company", "about"),
-      jobDescription: pick(row, "Job Description", "job description"),
       roles: parseRoles(row),
       selectionCriteria: splitLines(pick(row, "Selection Criteria", "selection criteria")),
       location: pick(row, "Location", "location") || "Remote",
@@ -173,18 +171,22 @@ const ICData = (() => {
   }
 
   function parseRoles(row){
-    // Supports either a single "Roles" JSON-ish field, or up to two
-    // role columns (Role 1 / Role 2 + their responsibilities/takeaways)
-    // depending on how the committee's sheet is structured.
+    // Supports any number of "Role N" column sets (Role 1, Role 2, Role 3,
+    // Role 4, ...) — just keeps checking increasing numbers until it hits
+    // one that isn't filled in. Add as many "Role N / Role N Responsibilities /
+    // Role N Takeaways" column triples to the sheet as you need; no code
+    // change required.
     const roles = [];
-    for (const n of [1, 2, 3]){
+    let n = 1;
+    while (true){
       const title = pick(row, `Role ${n}`, `role${n}`);
-      if (!title) continue;
+      if (!title) break;
       roles.push({
         title,
         responsibilities: splitLines(pick(row, `Role ${n} Responsibilities`, `role${n} responsibilities`, `key responsibilities ${n}`)),
         takeaway: pick(row, `Role ${n} Takeaways`, `role${n} takeaway`, `takeaways ${n}`, "Takeaways / Stipend")
       });
+      n++;
     }
     if (roles.length === 0){
       const single = pick(row, "Role", "roles");

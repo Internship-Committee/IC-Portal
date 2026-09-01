@@ -51,7 +51,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     <div class="lp-body">
       <div class="lp-main">
         ${project.aboutCompany ? section("About the Company", `<p>${escapeHtml(project.aboutCompany)}</p>`) : ""}
-        ${project.jobDescription ? section("Job Description", `<p>${escapeHtml(project.jobDescription)}</p>`) : ""}
         ${project.roles.length ? section("Role" + (project.roles.length > 1 ? "s" : ""), project.roles.map(roleBlock).join("")) : ""}
         ${project.selectionCriteria.length ? section("Selection Criteria", bulletList(project.selectionCriteria)) : ""}
       </div>

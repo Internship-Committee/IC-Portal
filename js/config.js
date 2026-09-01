@@ -55,7 +55,7 @@ const IC_CONFIG = {
   // (works with zero setup, perfect for previewing before the sheet is ready).
   // Flip to false per-source once that source's tab is set up correctly.
   useLocalData: {
-    courses: false,
+    courses: true,
     caseStudies: true,
     githubRepos: true,
     resources: true,
