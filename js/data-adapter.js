@@ -114,6 +114,7 @@ const ICData = (() => {
       domain: pick(row, "Domain", "domain") || "Uncategorized",
       price:  pick(row, "Price", "price"),
       rating: parseFloat(pick(row, "Rating", "rating")) || null,
+      duration: pick(row, "Duration", "Course Duration", "duration"),
       link:   pick(row, "Course Link", "link", "url")
     };
   }
@@ -135,22 +136,73 @@ const ICData = (() => {
   }
 
   function normResource(row){
-    const loginRaw = (pick(row, "College Login Required", "login") || "").toString().trim().toLowerCase();
     return {
       name: pick(row, "Resource Name", "name"),
       description: pick(row, "Description", "description"),
-      loginRequired: ["yes", "y", "true", "required"].includes(loginRaw),
+      resourceType: pick(row, "Resource Type", "type", "resource type") || "Resource",
       link: pick(row, "Link", "link", "url")
     };
   }
 
   function normCompetition(row){
+    const scrapedAt = pick(row, "Scraped At", "scraped_at", "scrapedat");
     return {
       name: pick(row, "Competition Name", "name"),
       institute: pick(row, "Institute", "organising institute", "institute"),
-      deadline: pick(row, "Deadline", "deadline"),
+      deadline: resolveDeadline(pick(row, "Deadline", "deadline"), scrapedAt),
       link: pick(row, "Link", "link", "url")
     };
+  }
+
+  // ---- Relative deadline resolution --------------------------------
+  // Scraped sources sometimes provide a human, relative deadline string
+  // (e.g. "24 days left", "1 Month Left", "2 Hours Left") alongside a
+  // "Scraped At" timestamp for when that snapshot was taken, instead of
+  // a fixed calendar date. This resolves that pair into a single,
+  // absolute date (time is intentionally dropped — only the date the
+  // deadline actually falls on matters downstream).
+  //
+  // A normal, already-parseable date (e.g. "2026-10-12") is left exactly
+  // as-is and passes straight through, so existing sheet rows keep
+  // working unchanged.
+
+  const RELATIVE_DEADLINE_RE = /(\d+)\s*(hour|hours|hr|hrs|day|days|week|weeks|month|months|year|years)\s*left/i;
+
+  function parseRelativeDeadline(text){
+    const m = (text || "").toString().trim().match(RELATIVE_DEADLINE_RE);
+    if (!m) return null;
+    return { amount: parseInt(m[1], 10), unit: m[2].toLowerCase().replace(/s$/, "") };
+  }
+
+  function addToDate(base, amount, unit){
+    const d = new Date(base.getTime());
+    switch (unit){
+      case "hour": case "hr": d.setHours(d.getHours() + amount); break;
+      case "day":  d.setDate(d.getDate() + amount); break;
+      case "week": d.setDate(d.getDate() + (amount * 7)); break;
+      case "month": d.setMonth(d.getMonth() + amount); break;
+      case "year": d.setFullYear(d.getFullYear() + amount); break;
+    }
+    return d;
+  }
+
+  function resolveDeadline(deadlineRaw, scrapedAtRaw){
+    if (!deadlineRaw) return "";
+
+    // Already an absolute, parseable date — pass through untouched.
+    if (!isNaN(Date.parse(deadlineRaw))) return deadlineRaw;
+
+    // Otherwise, try to interpret it as a relative offset from the
+    // "Scraped At" timestamp (or from right now, if that's missing/bad).
+    const rel = parseRelativeDeadline(deadlineRaw);
+    if (rel){
+      const scrapedAtMs = Date.parse(scrapedAtRaw);
+      const base = isNaN(scrapedAtMs) ? new Date() : new Date(scrapedAtMs);
+      return addToDate(base, rel.amount, rel.unit).toISOString();
+    }
+
+    // Unrecognized format — pass through as-is (matches old behavior).
+    return deadlineRaw;
   }
 
   // Live Project stages. Put just the NUMBER in the sheet's "Status" column
@@ -196,7 +248,7 @@ const ICData = (() => {
       location: pick(row, "Location", "location") || "Remote",
       duration: pick(row, "Project Duration", "duration"),
       applyUrl: pick(row, "Apply URL", "apply link", "application link"),
-      deadline: pick(row, "Deadline", "application deadline"),
+      deadline: resolveDeadline(pick(row, "Deadline", "application deadline"), pick(row, "Scraped At", "scraped_at", "scrapedat")),
       googleDocUrl: pick(row, "Google Doc URL", "google doc")
     };
   }

@@ -127,6 +127,11 @@
   border: 1px solid rgba(56,198,217,0.3);
   background: rgba(56,198,217,0.08);
 }
+.duration-chip{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size: 12.5px; font-weight:600; color: var(--text-secondary);
+}
+.duration-chip svg{ width:13px; height:13px; flex-shrink:0; }
 .course-card .card-link{
   margin-top:4px;
   display:inline-flex; align-items:center; gap:7px;
@@ -148,16 +153,20 @@
 }
 .list-card .card-link svg{ width:14px; height:14px; }
 
-.login-badge{
+/* Resource type badge. Base rule is the fallback look for any type the
+   committee adds later that isn't explicitly styled below (e.g. a brand
+   new "Case Repository" type just works, no CSS change required). */
+.resource-type-badge{
   align-self:flex-start;
   font-size: 10.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
   padding: 5px 11px; border-radius: 999px;
+  color:#CFE0FF; background: rgba(120,150,255,0.12); border:1px solid rgba(120,150,255,0.3);
 }
-.login-badge.required{
-  color:#FFB199; background: rgba(255,110,70,0.12); border:1px solid rgba(255,110,70,0.3);
-}
-.login-badge.not-required{
+.resource-type-badge.type-e-database{
   color:#8CF0B0; background: rgba(60,220,140,0.1); border:1px solid rgba(60,220,140,0.28);
+}
+.resource-type-badge.type-online-journals{
+  color:#FFD98A; background: rgba(255,200,80,0.1); border:1px solid rgba(255,200,80,0.3);
 }
 
 /* ---------------- Competition card ---------------- */
@@ -292,4 +301,13 @@
 @keyframes shimmer{
   0%{ background-position: 140% 0; }
   100%{ background-position: -60% 0; }
+}
+
+/* ---------------- Page disclaimer (prices / deadlines subject to change) ---------------- */
+.page-disclaimer{
+  margin: 18px 2px 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  font-style: italic;
 }

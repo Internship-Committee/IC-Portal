@@ -56,9 +56,9 @@ const IC_CONFIG = {
   // Flip to false per-source once that source's tab is set up correctly.
   useLocalData: {
     courses: false,
-    caseStudies: true,
+    caseStudies: false,
     githubRepos: true,
-    resources: true,
+    resources: false,
     competitions: false,
     liveProjects: false
   },

@@ -13,7 +13,13 @@
     document.querySelectorAll("[data-ic-logo]").forEach(el => { el.src = IC_CONFIG.logo; });
     document.querySelectorAll("[data-ic-email]").forEach(el => {
       el.href = `mailto:${IC_CONFIG.committee.email}`;
-      el.querySelector("span") && (el.querySelector("span").textContent = IC_CONFIG.committee.email);
+      el.title = IC_CONFIG.committee.email;
+      const span = el.querySelector("span");
+      if (span){
+        // Prefer breaking right after the "@" so a long address wraps into
+        // "name@" / "domain" instead of splitting a word in half.
+        span.innerHTML = IC_CONFIG.committee.email.replace("@", "@<wbr>");
+      }
     });
     document.querySelectorAll("[data-ic-linkedin]").forEach(el => {
       el.href = IC_CONFIG.committee.linkedin;
@@ -34,7 +40,42 @@
     const group = document.querySelector(".nav-group");
     if (group){
       const trigger = group.querySelector(".nav-group-trigger");
-      trigger.addEventListener("click", () => group.classList.toggle("is-open"));
+      trigger.addEventListener("click", () => {
+        // If the sidebar is collapsed to icons-only, expand it first so the
+        // submenu labels are actually visible instead of toggling unseen.
+        if (shell && shell.classList.contains("sidebar-collapsed")){
+          setCollapsed(false);
+          group.classList.add("is-open");
+          trigger.setAttribute("aria-expanded", "true");
+          return;
+        }
+        const isOpen = group.classList.toggle("is-open");
+        trigger.setAttribute("aria-expanded", String(isOpen));
+      });
+    }
+
+    // Desktop sidebar collapse / expand
+    const collapseBtn = document.querySelector(".sidebar-collapse-btn");
+    const COLLAPSE_KEY = "ic-sidebar-collapsed";
+
+    function setCollapsed(collapsed){
+      if (!shell) return;
+      shell.classList.toggle("sidebar-collapsed", collapsed);
+      if (collapseBtn){
+        collapseBtn.setAttribute("aria-expanded", String(!collapsed));
+        collapseBtn.setAttribute("aria-label", collapsed ? "Expand sidebar" : "Collapse sidebar");
+      }
+      try { localStorage.setItem(COLLAPSE_KEY, collapsed ? "1" : "0"); } catch (e) { /* storage unavailable */ }
+    }
+
+    if (shell && collapseBtn){
+      let stored = null;
+      try { stored = localStorage.getItem(COLLAPSE_KEY); } catch (e) { /* storage unavailable */ }
+      if (stored === "1") setCollapsed(true);
+
+      collapseBtn.addEventListener("click", () => {
+        setCollapsed(!shell.classList.contains("sidebar-collapsed"));
+      });
     }
 
     // Active link highlighting based on body[data-page]
