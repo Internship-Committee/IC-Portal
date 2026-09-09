@@ -173,6 +173,15 @@
 .competition-card{
   padding: 22px 24px;
   display:flex; flex-direction:column; gap:12px;
+  /* more translucent than the default glass-card surface, so cards read
+     as "floating" panes over whatever is scrolling behind the sticky,
+     fading header */
+  background: rgba(255,255,255,0.32);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.competition-card:hover{
+  background: rgba(255,255,255,0.5);
 }
 .competition-card h3{ font-size: 1.1rem; margin:0; }
 .competition-card .institute{ font-size:13.5px; color: var(--text-secondary); }
