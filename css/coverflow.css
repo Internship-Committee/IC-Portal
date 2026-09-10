@@ -22,18 +22,33 @@
   padding: 0 56px;
   background: linear-gradient(190deg, var(--cf-bg-1) 0%, var(--cf-bg-2) 55%, var(--cf-bg-1) 100%);
   border-radius: 0 0 32px 32px;
-  height: 560vh; /* JS sets this precisely once it runs; this is the no-JS fallback */
+  height: 100vh; /* fixed — the carousel loops forever, it doesn't need a runway */
+  overscroll-behavior: contain;
 }
 
 .coverflow-sticky{
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  position: relative;
+  height: 100%;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  perspective: 1600px;
+  perspective: 1900px;
+}
+
+/* subtle vignette + pulse while input is being captured, so the "you're
+   inside the loop now" state reads clearly without extra chrome */
+.coverflow-sticky::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 0 rgba(179,32,63,0);
+  transition: box-shadow .5s var(--ease);
+}
+.coverflow.cf-locked .coverflow-sticky::before{
+  box-shadow: inset 0 0 120px 10px rgba(179,32,63,0.16);
 }
 
 .coverflow-hint{
@@ -101,7 +116,9 @@
   transform-style: preserve-3d;
   backface-visibility: hidden;
   will-change: transform, opacity;
-  transition: transform .12s linear, opacity .12s linear;
+  /* No CSS transition here on purpose — the JS drives a momentum-eased
+     value every frame, so an additional CSS transition would double up
+     and make the motion feel laggy/rubbery instead of fluid. */
 }
 
 .cf-card-inner{
@@ -153,7 +170,7 @@
 /* ---- progress dots ---- */
 .coverflow-dots{
   position: absolute;
-  bottom: 40px; left: 50%;
+  bottom: 64px; left: 50%;
   transform: translateX(-50%);
   z-index: 20;
   display: flex; gap: 10px;
@@ -165,6 +182,31 @@
 }
 .cf-dot.is-active{ background: var(--cf-maroon-br); transform: scale(1.4); }
 
+/* ---- skip control: lets people deliberately move on to the footer
+   instead of riding the loop out with a long sustained scroll ---- */
+.coverflow-skip{
+  position: absolute;
+  bottom: 22px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 0; border: 0; background: none; cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--cf-muted);
+  opacity: .65;
+  transition: opacity .2s var(--ease), color .2s var(--ease);
+}
+.coverflow-skip:hover{ opacity: 1; color: var(--cf-cream); }
+.coverflow-skip svg{ width: 12px; height: 12px; animation: cf-skip-bob 1.6s ease-in-out infinite; }
+@keyframes cf-skip-bob{
+  0%, 100%{ transform: translateY(0); }
+  50%{ transform: translateY(3px); }
+}
+
 @media (max-width: 900px){
   .coverflow{ margin: 0 -20px; padding: 0 20px; border-radius: 0 0 22px 22px; }
   .cf-card{ width: min(320px, 82vw); }
@@ -175,14 +217,16 @@
 @media (prefers-reduced-motion: reduce){
   .coverflow{ height: auto !important; padding-top: 60px; padding-bottom: 60px; }
   .coverflow-sticky{ position: static; height: auto; overflow: visible; display: block; }
-  .coverflow-logo-stage, .coverflow-hint, .coverflow-dots{ display: none; }
+  .coverflow-logo-stage, .coverflow-hint, .coverflow-dots, .coverflow-skip{ display: none; }
   .coverflow-track{ position: static; display: flex; flex-direction: column; gap: 20px; align-items: center; }
   .cf-card{ position: static; transform: none !important; opacity: 1 !important; width: min(460px, 100%); }
 }
 
+.coverflow.cf-static{ height: auto !important; }
 .coverflow.cf-static .coverflow-sticky{ position: static; height: auto; overflow: visible; display: block; }
 .coverflow.cf-static .coverflow-logo-stage,
 .coverflow.cf-static .coverflow-hint,
-.coverflow.cf-static .coverflow-dots{ display: none; }
+.coverflow.cf-static .coverflow-dots,
+.coverflow.cf-static .coverflow-skip{ display: none; }
 .coverflow.cf-static .coverflow-track{ position: static; display: flex; flex-direction: column; gap: 20px; align-items: center; padding: 60px 0; }
 .coverflow.cf-static .cf-card{ position: static; transform: none !important; opacity: 1 !important; width: min(460px, 100%); }
