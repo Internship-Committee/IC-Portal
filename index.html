@@ -10,8 +10,7 @@
 <link rel="stylesheet" href="css/layout.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/home.css">
-<link rel="stylesheet" href="css/home-marquee.css">
-<link rel="stylesheet" href="css/coverflow.css">
+<link rel="stylesheet" href="css/scene.css">
 </head>
 <body data-page="home">
 <a class="skip-link" href="#main-content">Skip to content</a>
@@ -65,69 +64,59 @@
 
   <main class="main" id="main-content">
 
-    <section class="hero hero-marquee">
+    <section class="scene" id="scene">
       <h1 class="visually-hidden">IPM Internship Committee, IIM Rohtak — Integrity. Collaboration. Passion.</h1>
 
-      <div class="marquee-stage">
-        <div class="marquee-row marquee-row--top" aria-hidden="true">
-          <div class="marquee-track marquee-track--left">
-            <div class="marquee-group">
-              <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
-            </div>
-            <div class="marquee-group" aria-hidden="true">
-              <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
-            </div>
-          </div>
-        </div>
+      <div class="scene-sticky">
+        <p class="scene-hint" id="sceneHint">Scroll to explore</p>
 
-        <div class="marquee-logo" aria-hidden="true">
-          <div class="marquee-logo-panel">
+        <div class="scene-logo-stage" aria-hidden="true">
+          <div class="scene-logo" id="sceneLogo">
             <img src="assets/logo.png" alt="">
           </div>
         </div>
 
-        <div class="marquee-row marquee-row--bottom" aria-hidden="true">
-          <div class="marquee-track marquee-track--right">
-            <div class="marquee-group">
-              <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
+        <div class="scene-marquee" id="sceneMarquee" aria-hidden="true">
+          <div class="marquee-row marquee-row--top">
+            <div class="marquee-track marquee-track--left">
+              <div class="marquee-group">
+                <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
+              </div>
+              <div class="marquee-group" aria-hidden="true">
+                <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--serif">No Guts No Glory</span><span class="marquee-sep">✦</span>
+              </div>
             </div>
-            <div class="marquee-group" aria-hidden="true">
-              <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
-              <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
+          </div>
+
+          <div class="marquee-row marquee-row--bottom">
+            <div class="marquee-track marquee-track--right">
+              <div class="marquee-group">
+                <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
+              </div>
+              <div class="marquee-group" aria-hidden="true">
+                <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
+                <span class="marquee-item marquee-item--sans">Integrity. Collaboration. Passion.</span><span class="marquee-sep">✦</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <p class="hero-sub">Courses, case studies, competitions and live industry projects — everything the IC puts together for IPM students, in one place.</p>
-    </section>
-
-    <section class="coverflow" id="coverflow" aria-label="Explore the IC portal">
-      <div class="coverflow-sticky">
-        <div class="coverflow-logo-stage" aria-hidden="true">
-          <div class="coverflow-logo" id="coverflowLogo">
-            <img src="assets/logo.png" alt="">
-          </div>
-        </div>
-
-        <p class="coverflow-hint">Scroll to explore — it loops, so keep going</p>
-
-        <div class="coverflow-track" id="coverflowTrack">
+        <div class="scene-cards" id="sceneCards">
           <a class="cf-card" data-cf-index="0" href="case-competitions.html">
             <div class="cf-card-inner">
               <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M17 5h3a4 4 0 0 1-4 4M7 5H4a4 4 0 0 0 4 4"/></svg></div>
@@ -183,7 +172,7 @@
           </a>
         </div>
 
-        <div class="coverflow-dots" id="coverflowDots" aria-hidden="true">
+        <div class="scene-dots" id="sceneDots" aria-hidden="true">
           <span class="cf-dot is-active"></span>
           <span class="cf-dot"></span>
           <span class="cf-dot"></span>
@@ -191,11 +180,6 @@
           <span class="cf-dot"></span>
           <span class="cf-dot"></span>
         </div>
-
-        <button class="coverflow-skip" type="button">
-          Continue to footer
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
       </div>
     </section>
 
@@ -211,7 +195,7 @@
 <script src="js/data-adapter.js"></script>
 <script src="js/sidebar.js"></script>
 <script src="js/render-home.js"></script>
-<script src="js/coverflow.js"></script>
+<script src="js/scene.js"></script>
 </body>
 </html>
 
